@@ -23,16 +23,17 @@ const authorise = async function (req,res,next){
     try{
         const blogId = req.params["blogId"];
         const decodedToken = req.decodedToken;
-        const blogByBlogId = await BlogModel.findOne({_id: blogId,isDeleted: false,deletedAt: null,});
+        const blogByBlogId = await BlogModel.findOne({_id: blogId, isDeleted: false, isPublished:true});
         if(!blogByBlogId){ return res.status(404).send({status:false, message:`no blogs found by blogId`});}
         if(decodedToken.authorId != blogByBlogId.authorId){
             return res.status(403).send({status:false , message:"unauthorize access"});
         }
         next()
     }catch(error){
-        res.status(500).send({error: error.message})
+        res.status(500).send(error.message)
     }
 }
+
 
 // ------------------- EXPORTING MODULE TO ROUTE.JS -----------------------------------------------------
 

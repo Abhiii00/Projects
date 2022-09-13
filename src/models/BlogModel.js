@@ -4,55 +4,51 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
-        enum: ["Mr", "Mrs", "Miss"],
+        required: 'title is required',
         trim: true
     },
     body: {
         type: String,
-        required: true,
+        required: 'body is required',
         trim: true
     },
     authorId: {
         type: ObjectId,
         ref: "NewAuthor",
-        required: true
+        required: 'authorId is required'
     },
 
-    tags: [String],
+    tags: [{
+        type: String,
+        trim: true
+    }],
     category: {
         type: String,
-        required: true,
+        required: 'category is required',
         trim: true
     },
-    subcategory: {
-        type: [String],
-        required: true,
+    subcategory: [{
+        type: String,
+        required: 'subcategory is required',
         trim: true
-    },
-
+    }],
     deletedAt: {
         type: Date,
-        default: null,
-        trim: true
+        default: null
     },
 
     isDeleted: {
         type: Boolean,
         default: false,
-        trim: true
     },
     publishedAt: {
         type: Date,
-        default: Date.now,
-        trim: true
+        default: null
     },
     isPublished: {
-        type: Boolean
-        , default: false,
-        trim: true
+        type: Boolean,
+        default: false
     },
-
-
 }, { timestamps: true });
 
 

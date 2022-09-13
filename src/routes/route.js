@@ -14,9 +14,9 @@ router.get("/getAllBlog",midd.authenticate,blogController.getAllBlog)
 // Update Blogs by blog ID
 router.put("/blogs/:blogId",midd.authenticate,midd.authorise,blogController.UpdateBlog)
 // Delete Blogs by blog ID
-router.delete("/blogs/:blogId",midd.authenticate,midd.authorise,blogController.deleteBlog)
+router.delete("/blogs/:blogId",midd.authenticate,midd.authorise,blogController.deleteBlog) 
 // Delete Blogs by Query params
-router.delete("/blogs",midd.authenticate,midd.authorise,blogController.deleteBlogs)
+router.delete("/blogs",midd.authenticate,blogController.deleteBlogs)
 // Author Login
 router.post("/login",authorController.loginUser)
 

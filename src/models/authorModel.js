@@ -5,7 +5,7 @@ const authorSchema = new mongoose.Schema(
   {
     fname: {
       type: String,
-      required: true,
+      required: 'first name is required',
       trim: true,
       validate(value) {
          if (!validator.isAlpha(value)) {
@@ -15,7 +15,7 @@ const authorSchema = new mongoose.Schema(
     },
     lname: {
       type: String,
-      required: true,
+      required: 'last name is required',
       trim: true,
       validate(value) {
          if (!validator.isAlpha(value)) {
@@ -24,14 +24,14 @@ const authorSchema = new mongoose.Schema(
        },
     },
     title: {
-      required: true,
       type: String,
       enum: ["Mr", "Mrs", "Miss"],
+      required: 'title is required',
       trim: true,
     },
     email: {
       type: String,
-      require: true,
+      require: 'email is required',
       trim: true,
       lowercase: true,
       unique: true,
@@ -43,7 +43,7 @@ const authorSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: 'password is required',
       trim: true,
       validate(value) {
          if (!validator.isStrongPassword(value)) {
