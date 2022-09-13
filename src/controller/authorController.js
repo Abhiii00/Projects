@@ -17,10 +17,6 @@ const isVAlidRequestBody = function(requestBody){
   return Object.keys(requestBody).length > 0
 }
 
-
-
-
-
 // create author ---------------------------------------
 const createAuthor= async function (req,res){
     try {
@@ -71,15 +67,12 @@ const createAuthor= async function (req,res){
       const authorData = {fname, lname, title, email, password,}
       const newAuthor = await authorModel.create(authorData)
 
-      res.status(201).send({status: true, msg: "author created successfully", data: authorData})
+      res.status(201).send({status: true, msg: "author created successfully", data: newAuthor})
     }
     catch (error){
         res.status(500).send(error.message)
     }
 }
-
-
-
 
 // login ----------------------------------------------------------------------
 
