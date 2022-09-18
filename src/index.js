@@ -1,11 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
-const { default: mongoose } = require('mongoose');
+const mongoose  = require('mongoose');
 const app = express();
 
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
+
 
 
 mongoose.connect("mongodb+srv://abhay:abhayabhay@cluster0.6itwk6b.mongodb.net/group27Database?retryWrites=true&w=majority", {

@@ -16,6 +16,7 @@ const isVAlidRequestBody = function(requestBody){
 }
 
 
+// ------------------------------------|| CREATE COLLEGE API ||--------------------------------------
 
 
 const createCollage = async function (req, res) {
@@ -69,7 +70,7 @@ const createCollage = async function (req, res) {
     }
 };
 
-
+// ------------------------------------|| GET COLLEGE DETAILS API ||--------------------------------------
 
  let getCollegeDetails = async function(req,res){
   try{
@@ -89,7 +90,7 @@ const createCollage = async function (req, res) {
     }
     const {name, fullName, logoLink} = findCollege
     let CollegeId = findCollege._id
-    let findIntern = await internModel.find({collegeId : CollegeId}).select({name : 1, email : 1, mobile : 1})
+    let findIntern = await internModel.find({collegeId : CollegeId}).select({name : 1, email : 1, mobile : 1, })
     
     let obj = {
         name : name,

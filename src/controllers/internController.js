@@ -8,10 +8,12 @@ const isValid = function (value) {
 }
 
 // ----------------|| function for validate empty resquest body ||--------------------
+
 const isVAlidRequestBody = function(requestBody){
     return Object.keys(requestBody).length > 0
 }
 
+// ------------------------------------|| CREATE INTERN API ||--------------------------------------
 
 const createIntern = async function(req,res){
     try {

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 
 const collageSchema = new mongoose.Schema({
@@ -7,18 +6,21 @@ const collageSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true,
+        trim:true
     },
     fullName: {
         type: String,
         require: true,
+        trim:true
     },
     logoLink: {
         type: String,
-        require: true
+        require: true,
+        trim:true
     },
     isDeleted: {
         type: Boolean,
-        default: false
+        default: false,
     },
 
 }, { timestamps: true });

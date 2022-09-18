@@ -4,16 +4,19 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const internSchema = new mongoose.Schema({
     name:{
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     email:{
         type: String,
         unique: true,
+        trim: true
     },
     mobile:{
       type: String,
       unique: true,
       require: true,
+      trim: true
     },
     collegeId:{
       type: ObjectId,
@@ -23,7 +26,7 @@ const internSchema = new mongoose.Schema({
       type: Boolean,
       default: false
     },
-  }, { timestamps: true });
+  },{ timestamps: true });
 
 
 
