@@ -1,10 +1,17 @@
 const userModel=require('../models/userModel')
 const validation = require('../validations/validation')
+const bcrypt = require("bcrypt")
 
 const userCreate=async function(req,res){
    try{
     let data=req.body
-    //if(Object.keys(data)==0) return res.status(400).send({status:true,msg:"body can't be empty"})
+    //hashing
+    const salt = await bcrypt.genSalt(10)
+    console.log(salt);
+    const hashpass = await bcrypt.hash(data.password, salt)
+    console.log(hashpass);
+
+    data.password = hashpass   
     let userData=await userModel.create(data)
     return res.status(201).send({status:true,msg:'User created successfully',data:userData})
    }
@@ -58,5 +65,20 @@ const userLogin = async function(req,res){
 
 
 
-module.exports={userCreate}
+
+
+const getUserDetails = async function(req,res){
+try {
+   let userIdByparams = req.params.userId
+   let findUserData = await userModel.findById({_id: userIdByparams})
+   return res.status(201).send({status:true, msg:'User created successfully', data:findUserData})
+
+} catch (err) {
+   return res.status(500).send({status:false,msg:err.message})
+}
+}
+
+
+module.exports={userCreate, getUserDetails}
+
 module.exports.userLogin = userLogin 
