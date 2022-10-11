@@ -1,9 +1,16 @@
 const userModel=require('../models/userModel')
+const bcrypt = require("bcrypt")
 
 const userCreate=async function(req,res){
    try{
-    let data = req.body
-    //if(Object.keys(data)==0) return res.status(400).send({status:true,msg:"body can't be empty"})
+    let data=req.body
+    //hashing
+    const salt = await bcrypt.genSalt(10)
+    console.log(salt);
+    const hashpass = await bcrypt.hash(data.password, salt)
+    console.log(hashpass);
+
+    data.password = hashpass   
     let userData=await userModel.create(data)
     return res.status(201).send({status:true,msg:'User created successfully',data:userData})
    }
