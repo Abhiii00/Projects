@@ -12,7 +12,6 @@ const isValidString=function(string){
 const isValidSpace = function (value) {
     if (typeof value === 'undefined' || value === null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
-    if (Object.keys==0) return false
     return true;
 }
 
@@ -36,5 +35,9 @@ const isvalidRequest = function (body) {
     return Object.keys(body).length > 0 //plz enter the data in the body
 }
 
+const isValidName = function (name) {
+    return /^([A-Za-z]+)$/.test(name) //atoz
+}
 
-module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest}
+
+module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName}
