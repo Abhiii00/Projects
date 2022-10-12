@@ -136,7 +136,7 @@
         "updatedAt": "2021-10-10T06:25:46.051Z",
         "__v": 0
     }
-}
+}     
 ```
 
 ## PUT /user/:userId/profile (Authentication and Authorization required)
