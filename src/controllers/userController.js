@@ -94,6 +94,7 @@ const userLogin = async function (req, res) {
       );
 
       let userId = user._id
+      res.setHeader("Authorization", "Bearer " + token);
       return res.send({ status: true, msg: "success", data: { userId, token } });
 
    } catch (error) {

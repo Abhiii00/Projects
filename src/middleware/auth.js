@@ -1,45 +1,51 @@
 const jwt = require('jsonwebtoken')
+const userModel = require('../models/userModel')
+const v = require('../validations/validation')
 
 
 const authentication = function (req, res, next) {
     try {
-        let token = req.Authorisation
-        if (!token) {
-            res.status(400).send({ err: "token is not present" })
+        const token = req.headers['authorization'].split(" ").pop()
+        if (!token) { res.status(400).send("Please Enter Token") }
+
+        let decodedtoken = jwt.verify(token, "g60bhoramp");
+
+        if (!decodedtoken) {
+            return res.status(401).send({ status: false, message: "This Token Is Invalid" });
         }
-        
-            let decodedtoken = jwt.verify(token, "finalProject")
-            User = decodedtoken.UserId
 
-           
-            
-            next()
-            
-          } catch (err) {
-            return res.status(400).send({ status: false, msg: `${err.message} please check your token` })
-        }
-    } 
+        req.userId = decodedtoken.userId;  //for using globally
+        next()
 
-    const authorisation = async function (req, res, next) {
-
-        try {
-            let anyId = req.params.anyId
-            let findAnyData = await anyModel.find({anyId})
-            if (!findAnyData) return res.status(404).send({ status: false, msg: "" })
-    
-            let UserId = findAnyData.anyId
-            let decodedToken = User
-
-
-            if (UserId != decodedToken) {
-                return res.status(401).send({ status: false, msg: "you are not authorise person " })
-            }
-            next()
-        } catch (err) {
-            return res.status(500).send({msg:err.message })
-        }
-    
+    } catch (err) {
+        return res.status(400).send({ status: false, msg: err.message })
     }
+}
+
+const authorisation = async function (req, res, next) {
+
+    try {
+        const userId = req.params.userId
+        if (userId) {
+            if (!v.isValidObjectId(userId)) {
+                return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
+            }
+
+            const User = await userModel.findById({ _id: userId })
+            if (!User) {
+                return res.status(404).send({ status: false, message: "User Not Found with this User Id" })
+            }
+            if (userId !== req.userId) {
+                return res.status(403).send({ status: false, message: "You are not Authorize To Perform This Action" })
+            }
+
+            next()
+        }
+    } catch (err) {
+        return res.status(500).send({ msg: err.message })
+    }
+
+}
 
 module.exports.authentication = authentication
 module.exports.authorisation = authorisation
