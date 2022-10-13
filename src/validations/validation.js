@@ -39,5 +39,8 @@ const isValidName = function (name) {
     return /^([A-Za-z]+)$/.test(name) //atoz
 }
 
+const isValidImg = (img) => {
+    return /image\/png|image\/jpeg|image\/jpg/.test(img);
+  };
 
-module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName}
+module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName,isValidImg}

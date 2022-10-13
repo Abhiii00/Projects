@@ -11,7 +11,9 @@ const userCreate = async function (req, res) {
       const { fname, lname, email,phone, password } = data
       let files=req.files
       if (files.length == 0) return res.status(400).send({ status: false, message: "File is mandatory" })
-      if (files && files.length > 0) var photolink = await uploadFile(files[0])
+      if (files && files.length > 0){
+      if (!(validator.isValidImg(files[0].mimetype))) { return res.status(400).send({ status: false, message: "Image Should be of JPEG/ JPG/ PNG" }); }
+      var photolink = await uploadFile(files[0])}
       if (!v.isvalidRequest(data)) return res.status(400).send({ status: false, message: `data is mandatory` })
 
       if (!v.isValidSpace(fname)) return res.status(400).send({ status: false, message: `fname is mandatory` })
@@ -28,8 +30,24 @@ const userCreate = async function (req, res) {
       if (!v.isValidMobile(phone)) return res.status(400).send({ status: false, message: `phone is mandatory` })
       if(await userModel.findOne({phone:phone})) return res.status(400).send({ status: false, message: `phone already exist` })
 
-      if (!password) return res.status(400).send({ status: false, message: `password is mandatory` })
+      if (!v.isValidSpace(password)) return res.status(400).send({ status: false, message: `password is mandatory` })
       if (!v.isValidPass(password)) return res.status(400).send({ status: false, message: `password is mandatory` })
+
+      //address
+      let address = JSON.parse(data.address)
+      if (!v.isValidSpace(address)) { return res.status(400).send({ status: false, message: "Please provide your address" }) }
+      
+      if (!address.shipping)  return res.status(400).send({ status: true, message: " Shipping address is required" }) 
+      if (!(validator.isValidSpace(address.shipping.street))) return res.status(400).send({ status: true, message: " Street address is required" }) 
+      if (!(validator.isValidSpace(address.shipping.city))) return res.status(400).send({ status: true, message: "  City is required" }) 
+      if (!(validator.isvalidPincode(address.shipping.pincode))) return res.status(400).send({ status: true, message: " Pincode is required" }) 
+      if (!(validator.isNumber(address.shipping.pincode))) return res.status(400).send({ status: false, message: "Please provide pincode in 6 digit number" }) 
+
+      if (!address.billing) return res.status(400).send({ status: true, message: " billing address is required" }) 
+      if (!(validator.isValidSpace(address.billing.street))) return res.status(400).send({ status: true, message: " Street billing address is required" })
+      if (!(validator.isValidSpace(address.billing.city))) return res.status(400).send({ status: true, message: " City billing address is required" })
+      if (!(validator.isValidSpace(address.billing.pincode))) return res.status(400).send({ status: true, message: " Billing pincode is required" }) 
+      if (!(validator.isvalidPincode(address.billing.pincode))) return res.status(400).send({ status: false, message: "Please provide pincode in 6 digit number" }) 
 
       //hashing
       const salt = await bcrypt.genSalt(10)
@@ -94,6 +112,7 @@ const getUserDetails = async function (req, res) {
       console.log(err.message)
       return res.status(500).send({ status: false, message: err.message })
    }
+   
 }
 
 const updateUser = async function (req, res) {
