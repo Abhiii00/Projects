@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt")
 const userCreate = async function (req, res) {
    try {
       let data = req.body
-      if(data==0) return res.status(400).send({ status: false, message: `data is mandatory` })
+      if(!v.isValidSpace(data)) return res.status(400).send({ status: false, message: `data is mandatory` })
       const {fname,lname,email,files,phone,password}=data
       
       if(!v.isValidString(fname)) return res.status(400).send({ status: false, message: `fname is mandatory` })
