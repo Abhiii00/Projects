@@ -6,6 +6,7 @@ const productController = require('../controllers/productController')
 router.post('/register',userController.userCreate)
 router.post('/login',userController.userLogin)
 router.get('/user/:userId/profile',userController.getUserDetails)
+router.put('/user/:userId/profile',userController.updateUser)
 
 
 //-----------------------|| PRODUCT API ||---------------------------
