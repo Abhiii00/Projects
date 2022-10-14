@@ -43,4 +43,8 @@ const isValidImg = (img) => {
     return /image\/png|image\/jpeg|image\/jpg/.test(img);
   };
 
-module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName,isValidImg}
+let isValidSize = (sizes) => {
+    return ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].includes(sizes);
+  }
+
+module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName,isValidImg,isValidSize}

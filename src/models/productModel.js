@@ -36,7 +36,8 @@ const productSchema = new mongoose.Schema({
 },
   availableSizes: {
     type: [String], 
-    enum:["S", "XS","M","X", "L","XXL", "XL"]
+    enum:["S", "XS","M","X", "L","XXL", "XL"],
+    //touppercase:true
 },
   installments: {
     type: Number
