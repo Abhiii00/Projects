@@ -3,6 +3,7 @@ const router=express.Router()
 const userController=require('../controllers/userController')
 const productController = require('../controllers/productController')
 
+//-----------------------|| USER API ||---------------------------
 router.post('/register',userController.userCreate)
 router.post('/login',userController.userLogin)
 router.get('/user/:userId/profile',userController.getUserDetails)

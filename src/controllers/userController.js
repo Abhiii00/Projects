@@ -119,12 +119,6 @@ const getUserDetails = async function (req, res) {
 
 const updateUser = async function (req, res) {
    try {
-      const userId = req.params.userId
-
-      if (!v.isValidObjectId(userId)) return res.status(404).send({ status: false, message: `user not found with this UserId ${userId}` })
-      const user = await userModel.findById({ _id: userId })
-      if (!user) return res.status(404).send({ status: false, message: `user not found with this UserId ${userId}` })
-
       let data = req.body
       if (!v.isvalidRequest(data)) return res.status(400).send({ status: false, message: "please Enter data inside request body" })
 
