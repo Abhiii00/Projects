@@ -43,6 +43,7 @@ const createProduct = async function(req, res){
 
         //productImage
         if (files.length == 0) return res.status(400).send({ status: false, message: "Please provide product image file!!" })
+        if(!v.isValidImg(files))return res.status(400).send({ status: false, message: "Please provide valid product image file!!" })
         let uploadImage = await uploadFile(files[0])
 
         //availableSizes
@@ -163,7 +164,7 @@ const getProductByQuery = async(req, res) => {
         return res.status(400).send({ status: true, message: "nothing get" })
       }
   
-      return res.status(200).send({ status: true, message: "success", data: finallyGetProduct })
+      return res.status(200).send({ status: true, message: "Success", data: finallyGetProduct })
     }
   
     catch (err) {

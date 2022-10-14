@@ -18,7 +18,7 @@ const authentication = function (req, res, next) {
         next()
 
     } catch (err) {
-        return res.status(400).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, msg: err.message })
     }
 }
 
@@ -33,10 +33,10 @@ const authorisation = async function (req, res, next) {
 
             const User = await userModel.findById({ _id: userId })
             if (!User) {
-                return res.status(404).send({ status: false, message: "User Not Found with this User Id" })
+                return res.status(404).send({ status: false, message: "User Not Found" })
             }
             if (userId !== req.userId) {
-                return res.status(403).send({ status: false, message: "You are not Authorize To Perform This Action" })
+                return res.status(403).send({ status: false, message: "Access Denied" })
             }
 
             next()
@@ -47,6 +47,6 @@ const authorisation = async function (req, res, next) {
 
 }
 
-module.exports.authentication = authentication
-module.exports.authorisation = authorisation
+
+module.exports= {authentication,authorisation}
 

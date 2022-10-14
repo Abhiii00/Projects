@@ -28,27 +28,27 @@ const userCreate = async function (req, res) {
       if (await userModel.findOne({ email: email })) return res.status(400).send({ status: false, message: `email already exist` })
 
       if (!v.isValidSpace(phone)) return res.status(400).send({ status: false, message: `phone is mandatory` })
-      if (!v.isValidMobile(phone)) return res.status(400).send({ status: false, message: `phone is mandatory` })
+      if (!v.isValidMobile(phone)) return res.status(400).send({ status: false, message: `enter a valid phone number` })
       if (await userModel.findOne({ phone: phone })) return res.status(400).send({ status: false, message: `phone already exist` })
 
       if (!v.isValidSpace(password)) return res.status(400).send({ status: false, message: `password is mandatory` })
-      if (!v.isValidPass(password)) return res.status(400).send({ status: false, message: `password is mandatory` })
+      if (!v.isValidPass(password)) return res.status(400).send({ status: false, message: `enter a valid password` })
 
       //address
       if (!v.isValidSpace(address)) { return res.status(400).send({ status: false, message: "Please provide your address" }) }
-      address = JSON.parse(data.address)
+      data.address = JSON.parse(data.address)
+      // if (!(typeof address.shipping==='object'))return res.status(400).send({ status: false, message: 'address should be in object' })
+      // if (!address.shipping) return res.status(400).send({ status: true, message: " Shipping address is required" })
+      // if (!(v.isValidSpace(address.shipping.street))) return res.status(400).send({ status: true, message: "Shipping Street address is required" })
+      // if (!(v.isValidSpace(address.shipping.city))) return res.status(400).send({ status: true, message: "Shipping  City is required" })
+      // if (!(v.isValidSpace(address.shipping.pincode))) return res.status(400).send({ status: true, message: "Shipping Pincode is required" })
+      // if (!(v.isvalidPincode(address.shipping.pincode))) return res.status(400).send({ status: false, message: "Shipping Please provide pincode in 6 digit number" })
 
-      if (!address.shipping) return res.status(400).send({ status: true, message: " Shipping address is required" })
-      if (!(v.isValidSpace(address.shipping.street))) return res.status(400).send({ status: true, message: " Street address is required" })
-      if (!(v.isValidSpace(address.shipping.city))) return res.status(400).send({ status: true, message: "  City is required" })
-      if (!(v.isValidSpace(address.shipping.pincode))) return res.status(400).send({ status: true, message: " Pincode is required" })
-      if (!(v.isvalidPincode(address.shipping.pincode))) return res.status(400).send({ status: false, message: "Please provide pincode in 6 digit number" })
-
-      if (!address.billing) return res.status(400).send({ status: true, message: " billing address is required" })
-      if (!(v.isValidSpace(address.billing.street))) return res.status(400).send({ status: true, message: " Street billing address is required" })
-      if (!(v.isValidSpace(address.billing.city))) return res.status(400).send({ status: true, message: " City billing address is required" })
-      if (!(v.isValidSpace(address.billing.pincode))) return res.status(400).send({ status: true, message: " Billing pincode is required" })
-      if (!(v.isvalidPincode(address.billing.pincode))) return res.status(400).send({ status: false, message: "Please provide pincode in 6 digit number" })
+      // if (!address.billing) return res.status(400).send({ status: true, message: " billing address is required" })
+      // if (!(v.isValidSpace(address.billing.street))) return res.status(400).send({ status: true, message: "billing street address is required" })
+      // if (!(v.isValidSpace(address.billing.city))) return res.status(400).send({ status: true, message: "billing city billing address is required" })
+      // if (!(v.isValidSpace(address.billing.pincode))) return res.status(400).send({ status: true, message: " billing pincode is required" })
+      // if (!(v.isvalidPincode(address.billing.pincode))) return res.status(400).send({ status: false, message: "billing please provide pincode in 6 digit number" })
 
       //hashing
       const salt = await bcrypt.genSalt(10)
@@ -57,7 +57,7 @@ const userCreate = async function (req, res) {
       console.log(hashpass);
 
       data.password = hashpass
-      data.address = JSON.parse(data.address)
+     // data.address = JSON.parse(data.address)
       data.profileImage = photolink
       let userData = await userModel.create(data)
       return res.status(201).send({ status: true, msg: 'User created successfully', data: userData })
