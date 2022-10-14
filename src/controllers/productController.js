@@ -197,7 +197,27 @@ const updateProduct = async function(req, res){
         let findProductData = await productModel.findById({_id: productId})//,{ $set: {...updateData} } )
         if(!findProductData) return res.status(404).send({status:false, msg:`no data found by this ${productId} productId`})
         if(findProductData.isDeleted == true) return res.status(400).send({status:false, msg: "this product is deleted so you can't update it"})
-        let updatedProductData = await productModel.findOneAndUpdate({  _id: productId, isDeleted: false},{ $set: {...updateData} } )
+
+        let { title, description, price, currencyId, currencyFormat, isFreeShipping, style, availableSizes, installments, productImage, deletedAt, isDeleted } = updateData
+
+        if(title){
+            if(!isValidTitle(title)) return res.status(400).send({status:false, msg: "please input title"})
+        if(findProductData.title == title) return res.status(400).send({status:false, msg: "title should be unique"})}
+        
+        if(description){
+         if(!v.isValidSpace(description)) return res.status(400).send({status:false, msg: "please input description"})}
+        // if(price == "") return res.status(400).send({status:false, msg: "please input price"})             
+        // if(currencyId == "") return res.status(400).send({status:false, msg: "please input currencyId"})
+        // if(currencyFormat == "") return res.status(400).send({status:false, msg: "please input currencyFormat"})
+        // if(isFreeShipping == "") return res.status(400).send({status:false, msg: "please input isFreeShipping "})
+        // if(productImage == "") return res.status(400).send({status:false, msg: "please input productImage"})
+        // if(style == "") return res.status(400).send({status:false, msg: "please input style"})
+        // if(availableSizes == "") return res.status(400).send({status:false, msg: "please input availableSizes"})
+        // if(installments == "") return res.status(400).send({status:false, msg: "please input installments"})
+        // if(deletedAt == "") return res.status(400).send({status:false, msg: "please input deletedAt"})      
+        // if(isDeleted == "") return res.status(400).send({status:false, msg: "please input isDeleted"})
+
+        let updatedProductData = await productModel.findOneAndUpdate({  _id: productId, isDeleted: false},{ $set: {...updateData} },{new:true} )
 
         return res.status(201).send({ status: true,message: "successfully updated",data: updatedProductData})
     } catch (err) {
