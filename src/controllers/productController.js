@@ -148,7 +148,7 @@ const getProductByQuery = async(req, res) => {
       }
 
       if (requestQuery.name) {
-        if (!v.isValidName(requestQuery.name)) return res.status(400).send({ status: false, message: "name should be string " })
+        if (!v.isValidName(requestQuery.name)) return res.status(400).send({ status: false, message: "Product not Found " })
         filter.title = {$regex: requestQuery.name }
       }
       
