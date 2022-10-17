@@ -5,19 +5,21 @@ const v = require('../validations/validation')
 
 const authentication = function (req, res, next) {
     try {
-        const token = req.headers['authorization'].split(" ").pop()
-        if (!token) { res.status(400).send("Please Enter Token") }
-
-        let decodedtoken = jwt.verify(token, "g60bhoramp");
-
-        if (!decodedtoken) {
-            return res.status(401).send({ status: false, message: "This Token Is Invalid" });
+        const token = req.headers['authorization']
+        if (typeof token == 'undefined' || typeof token == 'null') {
+            return res.status(400).send({ status: false, msg: "Please Provide Token" })
         }
 
-        req.userId = decodedtoken.userId;  //for using globally
-        next()
 
-    } catch (err) {
+        let Token = token.split(" ").pop()
+        jwt.verify(Token, "g60bhoramp", function (error, userInfo) {
+            if (error) {
+                return res.status(401).send({ status: false, message: error.message });
+            } else {
+                req.userId = userInfo.userId
+                next()
+            }
+ })} catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
     }
 }
@@ -25,6 +27,7 @@ const authentication = function (req, res, next) {
 const authorisation = async function (req, res, next) {
 
     try {
+        const UserIdInToken = req.userId
         const userId = req.params.userId
         if (userId) {
             if (!v.isValidObjectId(userId)) {
@@ -35,7 +38,7 @@ const authorisation = async function (req, res, next) {
             if (!User) {
                 return res.status(404).send({ status: false, message: "User Not Found" })
             }
-            if (userId !== req.userId) {
+            if (userId !== UserIdInToken) {
                 return res.status(403).send({ status: false, message: "Access Denied" })
             }
 
@@ -48,5 +51,5 @@ const authorisation = async function (req, res, next) {
 }
 
 
-module.exports= {authentication,authorisation}
+module.exports = { authentication, authorisation }
 
