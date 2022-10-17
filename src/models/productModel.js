@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema({
 },
   price: {
     type: Number, 
-    required: true 
+    required: true,
+    trim: true, 
 },  //, valid number/decimal
   currencyId: {
     type: String, 

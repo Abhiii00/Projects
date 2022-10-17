@@ -27,14 +27,12 @@ const isValidRequestBody = function (value) {
 
 //for blank spaces & string check
 const isValid=function(value){
-    if (typeof value === "undefined" || value === null || value == " ")
-        return false;
-    if (typeof value === "string" && value.trim().length > 0)
-        return true;
+    if (typeof value === "undefined" || value === null || value == " ") return false;
+    if (typeof value === "string" && value.trim().length > 0) return true;
     return false;
 
 }
-const isValidSizes=function(size){
+const isValidSizes=function(sizes){
     return ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].includes(sizes);
 }
 
