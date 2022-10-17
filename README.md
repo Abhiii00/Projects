@@ -479,23 +479,3 @@ Refer below sample
   updatedAt: "2021-09-17T04:25:07.803Z",
 }
 ```
-<!-- const getProductByQuery = async function(req, res){
-    try {
-        let productData = req.query
-         const {availableSizes, title, price } = productData
-        if (availableSizes === "") return res.status(400).send({ status: false, msg: "please enter size" })
-        if(!availableSizes == "S" ||availableSizes == "XS" ||availableSizes == "M" || availableSizes == "X" || availableSizes == "L" || availableSizes == "XXL" || availableSizes == "XL")
-           return res.status(400).send({ status: false, msg: `choose size form this "S", "XS","M","X", "L","XXL", "XL"` })
-       
-        if (title === "") return res.status(400).send({ status: false, msg: "please enter productName" })   
-        if (price === "") return res.status(400).send({ status: false, msg: "please enter price" })
-         
-        let undeletedData = await productModel.find({isDeleted: false, ...productData})
-        if(undeletedData.length == 0) return res.status(404).send({status:false, msg:"no data found"})
-
-        return res.status(200).send({ status: true, msg: "get data successfully", data: undeletedData })
-
-    } catch (err) {
-        return res.status(500).send({ status: false, msg: err.message })
-    }
-} -->
