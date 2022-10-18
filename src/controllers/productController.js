@@ -118,8 +118,6 @@ const createProduct = async function(req, res){
 
 //------------------------------|| GET PRODUCT BY QUERY ||----------------------------------
 
-//------------------------------|| GET PRODUCT BY QUERY ||----------------------------------
-
 const getProductByQuery = async(req, res) => {
     try {
       let requestQuery = req.query
@@ -148,7 +146,7 @@ const getProductByQuery = async(req, res) => {
       }
 
       if (requestQuery.name) {
-        if (!v.isValidName(requestQuery.name)) return res.status(400).send({ status: false, message: "Product not Found " })
+        //if (!v.isValidProductName(requestQuery.name)) return res.status(400).send({ status: false, message: "Product not Found " })
         filter.title = {$regex: requestQuery.name }
       }
       
@@ -269,6 +267,7 @@ const updateProduct = async function(req, res){
         }
 
         let files = req.files
+        
         if(productImage){
             if (files.length != 0) {
                 await uploadFile(files[0])

@@ -21,4 +21,4 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true })
 
-module.exports = mongoose.model('UserCollection', userSchema)
+module.exports = mongoose.model('userCollection', userSchema)

@@ -1,11 +1,66 @@
 const cartModel = require('../models/cartModel')
 const v = require('../validations/validation')
-
+const userModel = require('../models/userModel')
+const productModel = require('../models/productModel')
 
 //------------------------------|| CREATE CART ||----------------------------------
 
 const createCart = async function (req, res) {
     try {
+        let data = req.body
+        let userid = req.params.userId
+        if (!v.isValidObjectId(userId)) return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
+        let userExist = await userModel.findById(userid)
+        if (!userExist) return res.status(404).send('User Not Exist')
+        let { productId, cartId } = data
+        if (!v.isValidObjectId(productId)) return res.status(400).send({ status: false, message: "Please Enter Valid productId" })
+        if (!v.isValidObjectId(cartId)) return res.status(400).send({ status: false, message: "Please Enter Valid cartId" })
+
+        let cartDataExist = await cartModel.findOne({ userId: userid })
+        let productData = await productModel.findOne({ _id: productId, isDeleted: false }).lean()
+        if (!productData) return res.status(404).send('no product found')
+        if (cartDataExist) {
+            if (!cartId) return res.status(400).send('cart id is Mandatory')
+            if (cartDataExist._id != cartId) {
+                return res.status(400).send({ status: false, message: "cart isn't exist" })
+            }
+            let { items, totalItems, totalPrice } = cartDataExist
+            let flag = true
+            for (let i in items) {
+                if (items[i].productId == productId) {
+                    items[i].quantity++
+                    flag = false
+                }
+            }
+            if (flag) {
+                let obj = {
+                    productId: productId,
+                    quantity: 1
+                }
+                items.push(obj)
+            }
+            totalItems = items.length
+            totalPrice += productData.price
+            const updateItems = { items, totalItems, totalPrice }
+            const updateCart = await cartModel.findByIdAndUpdate(cartId, { $set: updateItems }, { new: true })
+            return res.status(201).send({ status: true, message: "Success", data: updateCart })
+        }
+        else {
+
+            let dataBlock = {
+                userId: userid,
+                items: [{
+                    productId: productId,
+                    quantity: 1
+                }],
+                totalItems: 1,
+                totalPrice: productData.price
+            }
+
+            let createCart = await cartModel.create(dataBlock)
+            return res.status(201).send({ status: true, message: 'Success', data: createCart })
+        }
+
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
@@ -19,14 +74,18 @@ const updateCart = async function (req, res) {
     try {
         let data = req.body;
         let userId = req.params.userId;
+        if (!v.isvalidRequest(data)) return res.status(400).send({ status: false, message: "Please Enter data" })
+        
         let { cartId, productId, removeProduct } = data;
-        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Please Enter data" }) 
+        
         if (!v.isValidObjectId(userId)) return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
+        
         let userExist = await userModel.findById(userId);
         if (!userExist) return res.status(404).send({ status: false, message: "User not Found" })
 
         if (!productId) return res.status(400).send({ status: false, message: "Please Enter Product Id" })
         if (!v.isValidObjectId(productId)) return res.status(400).send({ status: false, message: "Please Enter valid Product Id" })
+        
         let product = await productModel.findById(productId);
         if (!product) return res.status(404).send({ status: false, message: "Product not found" })
 
@@ -64,7 +123,7 @@ const updateCart = async function (req, res) {
                     //updating the cart data 
                     cartExist.totalItems = cartExist.items.length;
                     let final = await cartModel.findOneAndUpdate({ _id: cartId }, { $set: cartExist }, { new: true })
-                    return res.status(200).send({ status: true, message: "Cart is updated successfully", data: final });
+                    return res.status(200).send({ status: true, message: "Success", data: final });
                 }
             }
             if (flag == false) {
@@ -82,9 +141,9 @@ const getCartDetails = async function (req, res) {
         if (!v.isValidObjectId(userId)) return res.status(400).send({ status: false, msg: `${userId} is not valid userid` })
         let findUserData = await userModel.findById({ _id: userId })
         if (!findUserData) return res.status(400).send({ status: false, msg: `no user found by this ${userId}` })
-        const data = await cartModel.findOne({ userId }).populate('items.product')
+        const data = await cartModel.findOne({ userId }).populate('items.productId')
         if (!data) return res.status(404).send({ status: false, msg: "no data exist" })
-        return res.status(200).send({ status: true, message: 'success', data })
+        return res.status(200).send({ status: true, message: 'Success', data: data })
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
@@ -104,8 +163,8 @@ const deleteCart = async function (req, res) {
         if (!cartdata) return res.status(404).send({ status: false, msg: "no data exist" })
 
         const updateData = { items: [], totalPrice: 0, totalItems: 0 }
-        const data = await cartModel.findOneAndUpdate({ userId }, { $set: { updateData } }, { new: true })
-        return res.status(200).send({ status: true, message: "success", data: data })
+        const data = await cartModel.findOneAndUpdate({ userId }, updateData, { new: true })
+        return res.status(204).send({ status: true, message: "Success", data: data })
 
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
