@@ -39,6 +39,10 @@ const isValidName = function (name) {
     return /^([A-Za-z]+)$/.test(name) //atoz
 }
 
+const isValidProductName=function(product){
+    return  /^[a-zA-Z]+(\s[a-zA-Z]+)?$/.test(product)
+}
+
 const isValidImg = (img) => {
     return /image\/png|image\/jpeg|image\/jpg/.test(img)
 //     if (img == "image/png" || img == "image/jpg" || img == "image/jpeg") {
@@ -51,4 +55,4 @@ let isValidSize = (sizes) => {
     return ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].includes(sizes);
   }
 
-module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName,isValidImg,isValidSize}
+module.exports={isValidMobile,isValidString,isValidEmail,isValidPass,isValidObjectId,isvalidPincode,isValidSpace,isvalidRequest,isValidName,isValidImg,isValidSize,isValidProductName}

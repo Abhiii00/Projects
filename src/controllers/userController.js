@@ -125,11 +125,18 @@ const getUserDetails = async function (req, res) {
 
 const updateUser = async function (req, res) {
    try {
+      let {userId}=req.params
+      let updateData = {}
+      const files = req.files
+      if (files.length != 0) {
+         const uploadedFileURL = await uploadFile(files[0])
+         updateData['profileImage'] = uploadedFileURL;
+      }
       let data = req.body
-      if (!v.isvalidRequest(data)) return res.status(400).send({ status: false, message: "please Enter data inside request body" })
+      if ((!v.isvalidRequest(data))&&(files.length == 0)) return res.status(400).send({ status: false, message: "please Enter data inside request body" })
 
       const { fname, lname, email, phone, password, address } = data
-      let updateData = {}
+      
       if (fname) {
          if (!v.isValidName(fname)) {
             return res.status(400).send({ status: false, message: "fname should be in character" });
@@ -196,13 +203,9 @@ const updateUser = async function (req, res) {
          }
          updateData[address] = address
       }
-      const files = req.files
-      if (files.length != 0) {
-         const uploadedFileURL = await aws.uploadFile(files[0])
-         updateData['profileImage'] = uploadedFileURL;
-      }
+      
       const updateduserprofile = await userModel.findOneAndUpdate({ _id: userId }, updateData, { new: true })
-      return res.status(200).send({ status: true, message: "updated user data", data: updateduserprofile })
+      return res.status(200).send({ status: true, message: "Update user profile is successful ", data: updateduserprofile })
 
    }
    catch (err) {
