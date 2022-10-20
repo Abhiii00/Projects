@@ -23,7 +23,7 @@ router.delete('/products/:productId',productController.deleteProduct)
 
 
 //-----------------------|| CART API'S ||---------------------------
-router.post('/users/:userId/cart',cartController.createCart)
+router.post('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.createCart)
 router.put('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.updateCart)
 router.get('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.getCartDetails)
 router.delete('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.deleteCart)
