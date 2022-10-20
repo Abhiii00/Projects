@@ -23,9 +23,9 @@ const createOrder = async function (req, res) {
   
       data["userId"] = userId;
   
-      if (!v.isValidSpace(cartId)) { return res.status(400).send({ status: "false", msg: "Please Enter cartId" })}
+      if (!v.isValidSpace(cartId)) { return res.status(400).send({ status: "false", message: "Please Enter cartId" })}
   
-      if (!v.isValidObjectId(cartId)) { return res.status(400).send({ status: "false", msg: "invalid cartId" })}
+      if (!v.isValidObjectId(cartId)) { return res.status(400).send({ status: "false", message: "invalid cartId" })}
   
       let CartExist = await cartModel.findOne({ userId:userId, _id:cartId })
   
@@ -140,7 +140,7 @@ const updateOrder = async function (req, res) {
     return res.status(200).send({status: true,message: "Success",data: finallyUpdatedOrder});
  
   } catch (err) {
-    return res.status(500).send({ status: false, msg: err.message });
+    return res.status(500).send({ status: false, message: err.message });
   }
 };
 

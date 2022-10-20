@@ -65,10 +65,10 @@ const userCreate = async function (req, res) {
       // data.address = JSON.parse(data.address)
       data.profileImage = photolink
       let userData = await userModel.create(data)
-      return res.status(201).send({ status: true, msg: 'User created successfully', data: userData })
+      return res.status(201).send({ status: true, message: 'Success', data: userData })
    }
    catch (err) {
-      return res.status(500).send({ status: false, msg: err.message })
+      return res.status(500).send({ status: false, message: err.message })
    }
 }
 
@@ -79,17 +79,17 @@ const userLogin = async function (req, res) {
 
       const { email, password } = requestBody
 
-      if (!email) return res.status(400).send({ status: false, msg: "please provide email" })
-      if (!v.isValidEmail(email)) return res.status(400).send({ status: false, msg: "email is not valid" })
+      if (!email) return res.status(400).send({ status: false, message: "please provide email" })
+      if (!v.isValidEmail(email)) return res.status(400).send({ status: false, message: "email is not valid" })
 
-      if (!password) return res.status(400).send({ status: false, msg: "please provide password" })
-      if (!v.isValidPass(password)) return res.status(400).send({ status: false, msg: `enter a valid password-"password length should be 8 min - 15 max"` })
+      if (!password) return res.status(400).send({ status: false, message: "please provide password" })
+      if (!v.isValidPass(password)) return res.status(400).send({ status: false, message: `enter a valid password-"password length should be 8 min - 15 max"` })
 
       let user = await userModel.findOne({ email: email });
-      if (!user) return res.status(404).send({ status: false, msg: "no user found-invalid user" });
+      if (!user) return res.status(404).send({ status: false, message: "no user found-invalid user" });
 
       let passCheck = await bcrypt.compare(password, user.password)
-      if (!passCheck) return res.status(400).send({ status: false, msg: "invalid password" });
+      if (!passCheck) return res.status(400).send({ status: false, message: "invalid password" });
 
       //tokengeneration
       let token = jwt.sign({
@@ -100,17 +100,17 @@ const userLogin = async function (req, res) {
       );
 
       let userId = user._id
-      return res.send({ status: true, msg: "success", data: { userId, token } });
+      return res.send({ status: true, message: "Success", data: { userId, token } });
 
    } catch (error) {
-      return res.status(500).send({ status: false, msg: error.message })
+      return res.status(500).send({ status: false, message: error.message })
    }
 }
 
 const getUserDetails = async function (req, res) {
    try {
       let userIdByparams = req.params.userId
-      if (!v.isValidObjectId(userIdByparams)) return res.status(400).send({ status: false, msg: `${userIdByparams} is not valid userId` })
+      if (!v.isValidObjectId(userIdByparams)) return res.status(400).send({ status: false, message: `${userIdByparams} is not valid userId` })
       let findUserData = await userModel.findById({ _id: userIdByparams })
       return res.status(200).send({ status: true, message: "User profile details", data: findUserData })
    } catch (err) {
@@ -213,7 +213,7 @@ const updateUser = async function (req, res) {
 
    }
    catch (err) {
-      return res.status(500).send({ status: false, msg: err.message })
+      return res.status(500).send({ status: false, message: err.message })
    }
 }
 
