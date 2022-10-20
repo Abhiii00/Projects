@@ -11,15 +11,17 @@ const authentication = function (req, res, next) {
         }
 
         let Token = token.split(" ").pop()
-        
-        jwt.verify(Token, "g60bhoramp", function (error, userInfo) {
-            if (error) {
-                return res.status(401).send({ status: false, message: error.message });
-            } else {
-                req.userId = userInfo.userId
-                next()
-            }
- })} catch (err) {
+
+       jwt.verify(Token, "g60bhoramp",(error,decoded)=>{
+             if (error) {
+            return res.status(401).send({ status: false, message: error.message });
+        } else {
+            req.userId = decoded.userId
+            next()
+        }
+        })
+       
+    } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
     }
 }
@@ -35,12 +37,9 @@ const authorisation = async function (req, res, next) {
             }
 
             const User = await userModel.findById({ _id: userId })
-            if (!User) {
-                return res.status(404).send({ status: false, message: "User Not Found" })
-            }
-            if (userId !== UserIdInToken) {
-                return res.status(403).send({ status: false, message: "Access Denied" })
-            }
+
+            if (!User) return res.status(404).send({ status: false, message: "User Not Found" })
+            if (userId !== UserIdInToken) return res.status(403).send({ status: false, message: "Access Denied" })
 
             next()
         }

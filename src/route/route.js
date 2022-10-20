@@ -10,7 +10,7 @@ const mid=require('../middleware/auth')
 //-----------------------|| USER API'S ||---------------------------
 router.post('/register',userController.userCreate)
 router.post('/login',userController.userLogin)
-router.get('/user/:userId/profile',mid.authentication,userController.getUserDetails)
+router.get('/user/:userId/profile',mid.authentication,mid.authorisation,userController.getUserDetails)
 router.put('/user/:userId/profile',mid.authentication,mid.authorisation,userController.updateUser)
 
 
@@ -23,7 +23,7 @@ router.delete('/products/:productId',productController.deleteProduct)
 
 
 //-----------------------|| CART API'S ||---------------------------
-router.post('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.createCart)
+router.post('/users/:userId/cart',cartController.createCart)
 router.put('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.updateCart)
 router.get('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.getCartDetails)
 router.delete('/users/:userId/cart',mid.authentication,mid.authorisation,cartController.deleteCart)

@@ -3,7 +3,7 @@ const aws=require('aws-sdk')
 aws.config.update({
     accessKeyId: "AKIAY3L35MCRZNIRGT6N",
     secretAccessKey: "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",
-    region: "ap-south-1"
+    region: "ap-south-1" //server
  })
  
  let uploadFile = async (file) => {
@@ -23,7 +23,7 @@ aws.config.update({
                 return reject({ "error": err })
             }
  
-            console.log("file uploaded succesfully")
+            //console.log("file uploaded succesfully")
             return resolve(data.Location)
         })
  

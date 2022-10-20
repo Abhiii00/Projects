@@ -8,19 +8,21 @@ const productModel = require('../models/productModel')
 const createCart = async function (req, res) {
     try {
         let data = req.body
+        if (!v.isvalidRequest(data)) {return res.status(400).send({ status: false, message: "Please Enter Data In Request Body" })}
+
         let userid = req.params.userId
-        if (!v.isValidObjectId(userId)) return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
+        if (!v.isValidObjectId(userid)) return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
         let userExist = await userModel.findById(userid)
-        if (!userExist) return res.status(404).send('User Not Exist')
+        if (!userExist) return res.status(404).send({ status: false, message:'User Not Exist'})
         let { productId, cartId } = data
         if (!v.isValidObjectId(productId)) return res.status(400).send({ status: false, message: "Please Enter Valid productId" })
-        if (!v.isValidObjectId(cartId)) return res.status(400).send({ status: false, message: "Please Enter Valid cartId" })
-
+        
         let cartDataExist = await cartModel.findOne({ userId: userid })
         let productData = await productModel.findOne({ _id: productId, isDeleted: false }).lean()
-        if (!productData) return res.status(404).send('no product found')
+        if (!productData) return res.status(404).send({ status: false, message:'no product found'})
         if (cartDataExist) {
-            if (!cartId) return res.status(400).send('cart id is Mandatory')
+            if (!cartId) return res.status(400).send({ status: false, message:'cart already created - enter valid cart id'})
+            if (!v.isValidObjectId(cartId)) return res.status(400).send({ status: false, message: "Please Enter Valid cartId" })
             if (cartDataExist._id != cartId) {
                 return res.status(400).send({ status: false, message: "cart isn't exist" })
             }
@@ -42,7 +44,7 @@ const createCart = async function (req, res) {
             totalItems = items.length
             totalPrice += productData.price
             const updateItems = { items, totalItems, totalPrice }
-            const updateCart = await cartModel.findByIdAndUpdate(cartId, { $set: updateItems }, { new: true })
+            const updateCart = await cartModel.findByIdAndUpdate(cartId, { $set: updateItems }, { new: true }).populate("items.productId","title price productImage")
             return res.status(201).send({ status: true, message: "Success", data: updateCart })
         }
         else {
@@ -58,7 +60,8 @@ const createCart = async function (req, res) {
             }
 
             let createCart = await cartModel.create(dataBlock)
-            return res.status(201).send({ status: true, message: 'Success', data: createCart })
+            let getCart=await cartModel.findById(createCart._id).populate("items.productId","title price productImage")
+            return res.status(201).send({ status: true, message: 'Success', data: getCart })
         }
 
 

@@ -45,9 +45,6 @@ const isValidProductName=function(product){
 
 const isValidImg = (img) => {
     return /image\/png|image\/jpeg|image\/jpg/.test(img)
-//     if (img == "image/png" || img == "image/jpg" || img == "image/jpeg") {
-//         return true
-//   };
 }
       
 
