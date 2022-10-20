@@ -245,7 +245,7 @@ const updateProduct = async function(req, res){
         }
         
         if(description){
-            if(!isValidTitle(description)) return res.status(400).send({status:false, msg: "enter valid description"})
+            if(!description) return res.status(400).send({status:false, msg: "enter valid description"})
         }
 
         if(price){

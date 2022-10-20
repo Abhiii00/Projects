@@ -11,6 +11,7 @@ const authentication = function (req, res, next) {
         }
 
         let Token = token.split(" ").pop()
+        
         jwt.verify(Token, "g60bhoramp", function (error, userInfo) {
             if (error) {
                 return res.status(401).send({ status: false, message: error.message });
@@ -26,8 +27,8 @@ const authentication = function (req, res, next) {
 const authorisation = async function (req, res, next) {
 
     try {
-        const UserIdInToken = req.userId
-        const userId = req.params.userId
+        const UserIdInToken = req.userId //globaluseridUsed
+        const userId = req.params.userId //params
         if (userId) {
             if (!v.isValidObjectId(userId)) {
                 return res.status(400).send({ status: false, message: "Please Enter Valid User Id" })
