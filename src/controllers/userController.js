@@ -57,7 +57,7 @@ const userCreate = async function (req, res) {
          } else { return res.status(400).send({ status: true, message: " billing address is required" }) }
       }
       //hashing
-      const salt = await bcrypt.genSalt(10)
+      const salt = await bcrypt.genSalt(50)
       console.log(salt);
       const hashpass = await bcrypt.hash(data.password, salt)
       console.log(hashpass);
