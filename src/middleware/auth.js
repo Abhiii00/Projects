@@ -10,7 +10,6 @@ const authentication = function (req, res, next) {
             return res.status(400).send({ status: false, msg: "Please Provide Token" })
         }
 
-
         let Token = token.split(" ").pop()
         jwt.verify(Token, "g60bhoramp", function (error, userInfo) {
             if (error) {
