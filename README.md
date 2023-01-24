@@ -1,6 +1,6 @@
-#Xhipment_Assignment
+#Job Application Site
 
-Assignment
+Project :-
 You are building a server-side application to manage a job board for software developers. The application should have the following features:
 
 1.	A user can create a new job posting by providing a title, description, and their email address. The user should also be able to specify the required skills and experience level for the job.
@@ -35,4 +35,3 @@ Your submission will be evaluated based on the following criteria:
 6.	Code quality and organization
 7.	If you complete the bonus tasks, your submission will also be evaluated on the implementation of authentication, authorization, pagination, and search.
 
-For Submissions and Queries about the assignment, please send an email to -  akash@xhipment.com and bharat@xhipment.com 
